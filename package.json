@@ -1,0 +1,52 @@
+{
+  "name": "vidadigital",
+  "version": "1.0.0",
+  "description": "Servicios para el monitorieo del bosuqe de la primavera",
+  "main": "app.js",
+  "scripts": {
+    "nodemon": "env-cmd -f .env nodemon ./app.js",
+    "start": "node ./app.js",
+    "start:development": "env-cmd -f .env node ./app.js",
+    "lint": "eslint .",
+    "lint-fix": "eslint . --fix",
+    "test:development": "env-cmd -f .env jest --coverage --runInBand --detectOpenHandles --forceExit --coverageReporters=cobertura",
+    "test": "jest --coverage --runInBand --detectOpenHandles --forceExit --coverageReporters=cobertura"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CarlosSoPe6/VidaDigital.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CarlosSoPe6/VidaDigital/issues"
+  },
+  "homepage": "https://github.com/CarlosSoPe6/VidaDigital#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "json2csv": "^5.0.3",
+    "jsonschema": "^1.2.7",
+    "jsonwebtoken": "^8.5.1",
+    "ms": "^2.1.2",
+    "mysql": "^2.18.1",
+    "simple-node-logger": "^18.12.24",
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "env-cmd": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.6.0",
+    "jest": "^23.6.0",
+    "jsdoc": "^3.6.6",
+    "nodemon": "^2.0.4",
+    "superagent": "^6.1.0",
+    "supertest": "^5.0.0"
+  }
+}

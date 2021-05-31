@@ -1,0 +1,17 @@
+# Config files
+.env
+
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# Editor
+.vscode/
+
+# Coverage
+coverage/
+
+# JSDoc
+out/
