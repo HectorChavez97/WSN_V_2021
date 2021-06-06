@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const request = require('supertest');
 const app = require('../server.js');
 
@@ -67,7 +69,7 @@ describe(`Test ${ROOT_PATH}/:code`, () => {
     const get = await request(app)
       .get(`${ROOT_PATH}/TST`);
     expect(get.statusCode).toBe(200);
-    expect(get.body.description).toBe('Valor cambiado');
+    expect(get.body.description).toBe('Variable de prueba');
     done();
   });
   test('It should response the 404 GET method', (done) => {
