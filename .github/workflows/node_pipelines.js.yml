@@ -11,14 +11,22 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [9.x, 10.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    env:
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_USER }}
+      MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      JWT_SUB: ${{ secrets.JWT_SUB }}
+      JWT_KEYPASS: ${{ secrets.JWT_KEYPASS }}
+      JWT_ISS: ${{ secrets.JWT_ISS }}
+      JWT_AUD: ${{ secrets.JWT_AUD }}
+      JWT_ALG: ${{ secrets.JWT_ALG }}
+    
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
