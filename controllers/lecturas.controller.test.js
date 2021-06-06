@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+require('dotenv').config()
+
 const request = require('supertest');
 const app = require('../server.js');
 
@@ -74,7 +76,7 @@ describe(`Test ${ROOT_PATH}/id/:id`, () => {
       .get(`${ROOT_PATH}/id/${id}`).expect(200).end(done);
   });
   it('It should 404 in a GET method', (done) => {
-    const id = 454894;
+    const id = -103214;
     request(app)
       .get(`${ROOT_PATH}/id/${id}`).expect(404).end(done);
   });

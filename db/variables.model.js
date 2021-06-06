@@ -173,7 +173,7 @@ async function deleteVariable(connection, code) {
   ];
   return new Promise((resolve, reject) => {
     connection.query(
-      'DELETE FROM ValuesCatalog WHERE id = ?;',
+      'DELETE FROM ValuesCatalog WHERE code = ?;',
       valuesToEscape,
       (err, results) => {
         if (err) {
