@@ -13,7 +13,7 @@ const lecturasLog = require('../loggers/lecturas');
 lecturasLog.mockImplementation((data) => console.log(data));
 errorLog.mockImplementation((data) => console.log(data));
 
-const ROOT_PATH = '/api/lecturas';
+const ROOT_PATH = '/wsnv21/api/lecturas';
 
 describe(`Test ${ROOT_PATH}/logs`, () => {
   it('It should 200 in a GET method', (done) => {
