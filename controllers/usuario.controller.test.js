@@ -1,10 +1,10 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const request = require('supertest');
 const app = require('../server.js');
 
-const ROOT_PATH = '/api/usuario';
-const AUTH_PATH = '/api/auth';
+const ROOT_PATH = '/wsnv21/api/usuario';
+const AUTH_PATH = '/wsnv21/api/auth';
 let token = '';
 
 describe(`Test ${ROOT_PATH}`, () => {

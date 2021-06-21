@@ -1,9 +1,9 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const request = require('supertest');
 const app = require('../server.js');
 
-const ROOT_PATH = '/api/variables';
+const ROOT_PATH = '/wsnv21/api/variables';
 
 describe(`Test ${ROOT_PATH}`, () => {
   test('It should response the GET method', (done) => {
