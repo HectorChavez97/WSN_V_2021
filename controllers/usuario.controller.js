@@ -101,9 +101,8 @@ async function patchPassword(req, res) {
 
     userModel
       .patchPassword(connection, userId, passEncrypt)
-      .then((val) => {
-        if (val.changedRows === 0) res.sendStatus(400);
-        else res.sendStatus(200);
+      .then(() => {
+        res.sendStatus(200);
       })
       .catch((err) => {
         if (Object.prototype.hasOwnProperty.call(err, 'sqlMessage')) {
@@ -130,9 +129,8 @@ async function patchType(req, res) {
 
     userModel
       .patchType(connection, userId, data.type)
-      .then((val) => {
-        if (val.changedRows === 0) res.sendStatus(400);
-        else res.sendStatus(200);
+      .then(() => {
+        res.sendStatus(200);
       })
       .catch((err) => {
         if (Object.prototype.hasOwnProperty.call(err, 'sqlMessage')) {

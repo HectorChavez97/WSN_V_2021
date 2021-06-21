@@ -759,7 +759,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Inserta una lectura en la base de datos",
+             "summary": "Inserta una lectura en la base de datos",
              "operationId": "postLectura",
              "parameters": [
                 {
@@ -782,7 +782,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Obtiene las últimas lecturas de todos los nodos",
+             "summary": "Obtiene las últimas lecturas de todos los nodos",
              "operationId": "getTLecturas",
              "parameters": [
                 {
@@ -806,7 +806,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Obtiene una lectura con un ID específico",
+             "summary": "Obtiene una lectura con un ID específico",
              "operationId": "getLecturaId",
              "parameters": [
                 {
@@ -830,7 +830,7 @@
              "security": [
                 "BearerAuth"
              ],
-             "description": "Actualiza una lectura con un ID específico",
+             "summary": "Actualiza una lectura con un ID específico",
              "operationId": "putLecturaId",
              "parameters": [
                 {
@@ -863,7 +863,7 @@
              "security": [
                 "BearerAuth"
              ],
-             "description": "Elimina una lectura con un ID específico",
+             "summary": "Elimina una lectura con un ID específico",
              "operationId": "deleteLecturaId",
              "parameters": [
                 {
@@ -895,7 +895,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Obtiene las últimas lecturas de un nodo en específico",
+             "summary": "Obtiene las últimas lecturas de un nodo en específico",
              "operationId": "getLecturasNodo",
              "parameters": [
                 {
@@ -908,10 +908,20 @@
                 {
                    "name": "count",
                    "in": "query",
-                   "description": "Número máximo de lecturas, por defecto 100",
+                   "description": "Número máximo de lecturas, por defecto 100. Para seleccionar todas las lecturas del nodo usar all",
                    "required": false,
-                   "type": "integer",
+                   "type": "string",
                    "default": "100"
+                },
+                {
+                   "name": "format",
+                   "in": "query",
+                   "description": "Usar csv obtener un archivo csv",
+                   "required": false,
+                   "schema":{
+                      "type":"string"
+                   },
+                   "default": ""
                 }
              ],
              "responses": {
@@ -931,7 +941,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Obtiene las lecturas de un nodo en específico en un día",
+             "summary": "Obtiene las lecturas de un nodo en específico en un día",
              "operationId": "getLecturasNodoDia",
              "parameters": [
                 {
@@ -961,6 +971,16 @@
                    "description": "Día a consultar las lecturas",
                    "required": true,
                    "type": "integer"
+                },
+                {
+                   "name": "format",
+                   "in": "query",
+                   "description": "Usar csv obtener un archivo csv",
+                   "required": false,
+                   "schema":{
+                      "type":"string"
+                   },
+                   "default": ""
                 }
              ],
              "responses": {
@@ -978,7 +998,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Obtiene las lecturas de un nodo en específico en una semana",
+             "summary": "Obtiene las lecturas de un nodo en específico en una semana",
              "operationId": "getLecturasNodoSemana",
              "parameters": [
                 {
@@ -1008,6 +1028,16 @@
                    "description": "Día a consultar las lecturas",
                    "required": true,
                    "type": "integer"
+                },
+                {
+                   "name": "format",
+                   "in": "query",
+                   "description": "Usar csv obtener un archivo csv",
+                   "required": false,
+                   "schema":{
+                      "type":"string"
+                   },
+                   "default": ""
                 }
              ],
              "responses": {
@@ -1025,7 +1055,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Obtiene las lecturas de un nodo en específico en un mes",
+             "summary": "Obtiene las lecturas de un nodo en específico en un mes",
              "operationId": "getLecturasNodoMes",
              "parameters": [
                 {
@@ -1048,6 +1078,16 @@
                    "description": "Mes a consultar las lecturas",
                    "required": true,
                    "type": "string"
+                },
+                {
+                   "name": "format",
+                   "in": "query",
+                   "description": "Usar csv obtener un archivo csv",
+                   "required": false,
+                   "schema":{
+                      "type":"string"
+                   },
+                   "default": ""
                 }
              ],
              "responses": {
@@ -1065,7 +1105,7 @@
              "tags": [
                 "Lecturas"
              ],
-             "description": "Obtiene las lecturas de un nodo en específico en un año",
+             "summary": "Obtiene las lecturas de un nodo en específico en un año",
              "operationId": "getLecturasNodoAño",
              "parameters": [
                 {
@@ -1081,6 +1121,16 @@
                    "description": "Año a consultar las lecturas",
                    "required": true,
                    "type": "integer"
+                },
+                {
+                   "name": "format",
+                   "in": "query",
+                   "description": "Usar csv obtener un archivo csv",
+                   "required": false,
+                   "schema":{
+                      "type":"string"
+                   },
+                   "default": ""
                 }
              ],
              "responses": {
@@ -1098,7 +1148,7 @@
              "tags": [
                 "Variables"
              ],
-             "description": "Obtiene todo el catálogo de valores",
+             "summary": "Obtiene todo el catálogo de valores",
              "operationId": "getVariables",
              "responses": {
                 "200": {
@@ -1120,7 +1170,7 @@
              "security": [
                 "BearerAuth"
              ],
-             "description": "Crea un nuevo registro en el catálogo de valores",
+             "summary": "Crea un nuevo registro en el catálogo de valores",
              "operationId": "postVariable",
              "requestBody": {
                 "required": true,
@@ -1151,7 +1201,7 @@
              "tags": [
                 "Variables"
              ],
-             "description": "Obtiene todo el catálogo de valores",
+             "summary": "Obtiene todo el catálogo de valores",
              "operationId": "getVariable",
              "parameters": [
                 {
@@ -1182,7 +1232,7 @@
              "security": [
                 "BearerAuth"
              ],
-             "description": "Crea un nuevo registro en el catálogo de valores",
+             "summary": "Crea un nuevo registro en el catálogo de valores",
              "operationId": "putVaraible",
              "parameters": [
                 {
@@ -1232,7 +1282,7 @@
              "security": [
                 "BearerAuth"
              ],
-             "description": "Crea un nuevo registro en el catálogo de valores",
+             "summary": "Crea un nuevo registro en el catálogo de valores",
              "operationId": "deleteVariable",
              "parameters": [
                 {
@@ -1263,7 +1313,7 @@
     "servers": [
        {
           "description": "Host",
-          "url": "http://papvidadigital-test.com/apis"
+          "url": "http://papvidadigital-test.com/wsnv21/api"
        }
     ],
     "components": {

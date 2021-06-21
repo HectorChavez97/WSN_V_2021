@@ -20,12 +20,12 @@ const usersRouter = require('./routes/usuarios.route');
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/api/api-docs/nodos', swaggerUI.serve, swaggerUI.setup(swaggerNodosDoc));
-app.use('/api/auth', authRotuer);
-app.use('/api/lecturas', lecturasRouter);
-app.use('/api/valores', valuesRouter);
-app.use('/api/nodo', nodesRouter);
-app.use('/api/variables', variablesRouter);
-app.use('/api/usuario', usersRouter);
+app.use('/wsnv21/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerNodosDoc));
+app.use('/wsnv21/api/auth', authRotuer);
+app.use('/wsnv21/api/lecturas', lecturasRouter);
+app.use('/wsnv21/api/valores', valuesRouter);
+app.use('/wsnv21/api/nodo', nodesRouter);
+app.use('/wsnv21/api/variables', variablesRouter);
+app.use('/wsnv21/api/usuario', usersRouter);
 
 module.exports = app;
