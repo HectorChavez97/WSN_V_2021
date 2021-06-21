@@ -5,8 +5,6 @@
  * @author Carlos Soto Pérez <carlos348@outlook.com>
  */
 
-const { query } = require("express");
-
 const DELETE_LECTURA_ID = 'DELETE FROM LecturasNodos WHERE id=?;';
 const ALL_QUERY_LECTURAS_NODO = 'SELECT * FROM LecturasNodos WHERE idNodo=? ORDER BY fecha_hora DESC;';
 const QUERY_LECTURAS_NODO = 'SELECT * FROM LecturasNodos WHERE idNodo=? ORDER BY fecha_hora DESC LIMIT ?;';
@@ -155,11 +153,11 @@ async function getLecturasNodo(connection, id, count) {
     count,
   ];
 
-  const query = count == 'all'? ALL_QUERY_LECTURAS_NODO : QUERY_LECTURAS_NODO
+  const executeQuery = count === 'all' ? ALL_QUERY_LECTURAS_NODO : QUERY_LECTURAS_NODO;
 
   return new Promise((resolve, reject) => {
     connection.query(
-      query,
+      executeQuery,
       valuesToEscape,
       (err, results) => {
         if (err) {

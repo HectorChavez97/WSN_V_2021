@@ -208,14 +208,14 @@ async function getLecturasNodo(req, res) {
   if (count === undefined) {
     count = 100;
   }
-  if(count != 'all'){
+  if (count !== 'all') {
     count = Number(count);
 
     if (isNaN(count)) {
       res.status(400).send('count is not number and is not "all"');
       return;
     }
-  } 
+  }
   try {
     await executionContext(async (context) => {
       const { connection } = context;
@@ -227,7 +227,7 @@ async function getLecturasNodo(req, res) {
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
-        res.attachment('lecturas.csv')
+        res.attachment('lecturas.csv');
         res.send(csv).end();
         return;
       }
@@ -272,7 +272,7 @@ async function getLecturasNodoDia(req, res) {
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
-        res.attachment('lecturas.csv')
+        res.attachment('lecturas.csv');
         res.send(csv).end();
         return;
       }
@@ -318,7 +318,7 @@ async function getLecturasNodoSemana(req, res) {
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
-        res.attachment('lecturas.csv')
+        res.attachment('lecturas.csv');
         res.send(csv).end();
         return;
       }
@@ -363,7 +363,7 @@ async function getLecturasNodoMes(req, res) {
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
-        res.attachment('lecturas.csv')
+        res.attachment('lecturas.csv');
         res.send(csv).end();
         return;
       }
@@ -407,7 +407,7 @@ async function getLecturasNodoAnio(req, res) {
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
-        res.attachment('lecturas.csv')
+        res.attachment('lecturas.csv');
         res.send(csv).end();
         return;
       }
