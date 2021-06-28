@@ -631,7 +631,7 @@
              }
           }
        },
-       "/usuario/password/{userId}": {
+       "/usuario/edit/user-password/{userId}": {
           "patch": {
              "tags": [
                 "Users"
@@ -639,8 +639,8 @@
              "security": [
                 "BearerAuth"
              ],
-             "summary": "Editar contraseña usuario mediante su ID",
-             "description": "",
+             "summary": "Editar contraseña de cualquier usuario mediante su ID",
+             "description": "Para editar la contraseña de cualquier usuario (ADMINS)",
              "operationId": "patchUserPassword",
              "parameters": [
                 {
@@ -680,7 +680,114 @@
              }
           }
        },
-       "/usuario/type/{userId}": {
+       "/usuario/edit/my-password/{userId}": {
+         "patch": {
+            "tags": [
+               "Users"
+            ],
+            "security": [
+               "BearerAuth"
+            ],
+            "summary": "Editar contraseña del usuario actual mediante su ID",
+            "description": "Solo para editar la contraseña del usuario actual con la que se tiene iniciada la sesion",
+            "operationId": "patchMyPassword",
+            "parameters": [
+               {
+                  "in": "body",
+                  "name": "data",
+                  "description": "",
+                  "required": true,
+                  "schema": {
+                     "type": "object",
+                     "properties": {
+                        "old_password": {
+                           "type": "string"
+                        },
+                        "new_password": {
+                           "type": "string"
+                        }
+                     }
+                  }
+               },
+               {
+                  "in": "header",
+                  "name": "Authorization",
+                  "schema": {
+                     "type": "string"
+                  },
+                  "description": "Bearer token",
+                  "required": true
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Ok"
+               },
+               "400": {
+                  "description": "Error"
+               },
+               "401": {
+                  "description": "Unauthorized"
+               },
+               "500": {
+                  "description": "Internal error"
+               }
+            }
+         }
+      },
+      "/usuario/edit/name/{userId}": {
+        "patch": {
+           "tags": [
+              "Users"
+           ],
+           "security": [
+              "BearerAuth"
+           ],
+           "summary": "Editar name del usuario actual mediante su ID",
+           "description": "",
+           "operationId": "patchName",
+           "parameters": [
+              {
+                 "in": "body",
+                 "name": "data",
+                 "description": "",
+                 "required": true,
+                 "schema": {
+                    "type": "object",
+                    "properties": {
+                       "name": {
+                          "type": "string"
+                       }
+                    }
+                 }
+              },
+              {
+                 "in": "header",
+                 "name": "Authorization",
+                 "schema": {
+                    "type": "string"
+                 },
+                 "description": "Bearer token",
+                 "required": true
+              }
+           ],
+           "responses": {
+              "200": {
+                 "description": "Ok"
+              },
+              "400": {
+                 "description": "Error"
+              },
+              "401": {
+                 "description": "Unauthorized"
+              },
+              "500": {
+                 "description": "Internal error"
+              }
+           }
+        }
+     },
+       "/usuario/edit/type/{userId}": {
           "patch": {
              "tags": [
                 "Users"
@@ -694,7 +801,7 @@
              "parameters": [
                 {
                    "in": "body",
-                   "name": "userId",
+                   "name": "data",
                    "description": "",
                    "required": true,
                    "schema": {
@@ -720,7 +827,7 @@
              }
           }
        },
-       "/usuario/todos/usuarios": {
+       "/usuario/all": {
           "get": {
              "tags": [
                 "Users"
@@ -1377,6 +1484,10 @@
                    "type": "string",
                    "required": true
                 },
+                "name": {
+                  "type": "string",
+                  "required": true
+               },
                 "password": {
                    "type": "string",
                    "required": true

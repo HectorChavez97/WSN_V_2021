@@ -23,9 +23,18 @@ const { executionContext } = require('../db/executionContext');
  */
 function getJson(response) {
   const json = [];
+
   response.forEach((lectura) => {
-    json.push(JSON.parse(lectura.data));
+    let data = JSON.parse(lectura.data)
+    
+    if(data.hasOwnProperty('ts')) {
+      data['tn'] = data['ts']
+      delete data['ts']
+    }
+
+    json.push(data);
   });
+
   return json;
 }
 
@@ -38,20 +47,24 @@ function buildCmdDataObject(cmdArray) {
   const dateCmd = cmdArray[4];
   const action = cmdArray[3].toLowerCase();
   let fechaHora = new Date(Date.now());
-  if (dateCmd === 'TS') {
+
+  if (dateCmd.toUpperCase() === 'TS') {
     fechaHora = new Date(cmdArray[5]);
-  } else if (dateCmd === 'TU') {
+  } else if (dateCmd.toUpperCase() === 'TU') {
     fechaHora = new Date(Number(cmdArray[5]) * 1000);
   }
+
   const data = {};
   data.id = idNodo;
   data.ac = action;
   data.tn = fechaHora;
+
   for (let i = 6; i < cmdArray.length; i += 2) {
     const dataMember = cmdArray[i].toLowerCase();
     const dataValue = Number(cmdArray[i + 1]);
     data[dataMember] = dataValue;
   }
+
   return data;
 }
 
@@ -68,28 +81,35 @@ async function postLectura(req, res) {
     res.status(400).send('BAD REQUEST. No cmd;');
     return;
   }
+
   lecturasLog(cmd);
   const cmdArray = cmd.trim().split(';');
+
   if (cmdArray[cmdArray.length - 1] !== '') {
     res.status(400).send('BAD REQUEST. cmd not structured;');
     return;
   }
+
   const idNodo = cmdArray[1];
   cmdArray.pop();
+
   if (cmdArray.length % 2 !== 0) {
     res.status(400).send('BAD REQUEST. cmd not structured;');
     return;
   }
+
   const data = buildCmdDataObject(cmdArray);
   // eslint-disable-next-line no-restricted-globals
   if (data.tn === undefined || isNaN(data.tn)) {
     res.status(400).send(`ID;${data.id};RS;Incorrect time format;`);
     return;
   }
+
   if (data.ac !== 'td') {
     res.status(400).send(`ID;${data.id};RS;No insert cmd;`);
     return;
   }
+
   try {
     await executionContext(async (context) => {
       const { connection } = context;
@@ -98,6 +118,7 @@ async function postLectura(req, res) {
         res.status(400).send(`ID;${data.id};RS;${validationResult.data};`);
         return;
       }
+
       const cleanData = validationResult.data;
       await lectuasModel.postLectura(connection, idNodo, cleanData.tn, cleanData);
       res.status(201).send(`ID;${data.id};RS;Correct;`);
@@ -120,11 +141,13 @@ async function getLecturas(req, res) {
   if (count === undefined) {
     count = 100;
   }
+
   count = Number(count);
   if (isNaN(count)) {
     res.status(400).send('count is not number');
     return;
   }
+
   try {
     await executionContext(async (context) => {
       const { connection } = context;
@@ -146,6 +169,7 @@ async function getLecturas(req, res) {
  */
 async function getLecturaId(req, res) {
   const { id } = req.params;
+
   try {
     await executionContext(async (context) => {
       const { connection } = context;
@@ -154,6 +178,7 @@ async function getLecturaId(req, res) {
         res.status(404).send('NOT FOUND');
         return;
       }
+
       res.json(response);
     });
   } catch (e) {
@@ -182,6 +207,7 @@ async function putLecturaId(req, res) {
  */
 async function deleteLecturaId(req, res) {
   const { id } = req.params;
+
   try {
     await executionContext(async (context) => {
       const { connection } = context;
@@ -205,9 +231,11 @@ async function getLecturasNodo(req, res) {
   const { id } = req.params;
   const { format } = req.query;
   let { count } = req.query;
+
   if (count === undefined) {
     count = 100;
   }
+
   if (count !== 'all') {
     count = Number(count);
 
@@ -220,10 +248,12 @@ async function getLecturasNodo(req, res) {
     await executionContext(async (context) => {
       const { connection } = context;
       const response = await lecturasModel.getLecturasNodo(connection, id, count);
+
       if (response.length === 0) {
         res.status(404).send('NOT FOUND');
         return;
       }
+
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
@@ -231,6 +261,7 @@ async function getLecturasNodo(req, res) {
         res.send(csv).end();
         return;
       }
+
       res.json(json).end();
     });
   } catch (e) {
@@ -253,9 +284,11 @@ async function getLecturasNodoDia(req, res) {
     mes,
     dia,
   } = req.params;
+
   const {
     format,
   } = req.query;
+
   const date = new Date(anio, mes - 1, dia);
   if (isNaN(date)) {
     res.status(400).send('BAD REQUEST. Año, mes, o día inválidos');
@@ -269,6 +302,7 @@ async function getLecturasNodoDia(req, res) {
         res.status(404).send('NOT FOUND');
         return;
       }
+
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
@@ -276,6 +310,7 @@ async function getLecturasNodoDia(req, res) {
         res.send(csv).end();
         return;
       }
+
       res.json(json).end();
     });
   } catch (e) {
@@ -298,9 +333,11 @@ async function getLecturasNodoSemana(req, res) {
     mes,
     dia,
   } = req.params;
+
   const {
     format,
   } = req.query;
+
   const startWeek = new Date(anio, mes - 1, dia, 0, 0, 0, 0);
   const endWeek = new Date(anio, mes - 1, dia, 23, 59, 59, 999);
   if (isNaN(startWeek) || isNaN(endWeek)) {
@@ -315,6 +352,7 @@ async function getLecturasNodoSemana(req, res) {
         res.status(404).send('NOT FOUND');
         return;
       }
+
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
@@ -322,6 +360,7 @@ async function getLecturasNodoSemana(req, res) {
         res.send(csv).end();
         return;
       }
+
       res.json(json).end();
     });
   } catch (e) {
@@ -343,15 +382,19 @@ async function getLecturasNodoMes(req, res) {
     anio,
     mes,
   } = req.params;
+
   const {
     format,
   } = req.query;
+
   const firstDayOfMonth = new Date(anio, mes - 1, 1, 0, 0, 0, 0);
   const lastDatyOfMonth = new Date(anio, mes, 0, 23, 59, 59, 999);
+
   if (isNaN(firstDayOfMonth) || isNaN(lastDatyOfMonth)) {
     res.status(400).send('BAD REQUEST. Año o mes inválidos');
     return;
   }
+
   try {
     await executionContext(async (context) => {
       const { connection } = context;
@@ -360,6 +403,7 @@ async function getLecturasNodoMes(req, res) {
         res.status(404).send('NOT FOUND');
         return;
       }
+
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
@@ -367,6 +411,7 @@ async function getLecturasNodoMes(req, res) {
         res.send(csv).end();
         return;
       }
+
       res.json(json).end();
     });
   } catch (e) {
@@ -387,11 +432,14 @@ async function getLecturasNodoAnio(req, res) {
     nodo,
     anio,
   } = req.params;
+
   const {
     format,
   } = req.query;
+
   const firstDayOfYear = new Date(Date.UTC(anio, 0, 1, 0, 0, 0));
   const lastDayOfYear = new Date(Date.UTC(anio, 11, 31, 23, 59, 59, 999));
+
   if (isNaN(firstDayOfYear) || isNaN(lastDayOfYear)) {
     res.status(400).send('BAD REQUEST. Año inválido');
     return;
@@ -400,10 +448,12 @@ async function getLecturasNodoAnio(req, res) {
     await executionContext(async (context) => {
       const { connection } = context;
       const response = await lectuasModel.getLecturasNodoAnio(connection, nodo, anio);
+
       if (response.length === 0) {
         res.status(404).send('NOT FOUND');
         return;
       }
+
       const json = getJson(response);
       if (format === 'csv') {
         const csv = parse(json);
@@ -411,6 +461,7 @@ async function getLecturasNodoAnio(req, res) {
         res.send(csv).end();
         return;
       }
+
       res.json(json).end();
     });
   } catch (e) {
@@ -432,6 +483,7 @@ async function getLogs(req, res) {
       res.status(500).send(err.message);
       return;
     }
+
     res.send(data.toString());
   });
 }
