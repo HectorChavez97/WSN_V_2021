@@ -25,11 +25,11 @@ function getJson(response) {
   const json = [];
 
   response.forEach((lectura) => {
-    let data = JSON.parse(lectura.data)
-    
-    if(data.hasOwnProperty('ts')) {
-      data['tn'] = data['ts']
-      delete data['ts']
+    const data = JSON.parse(lectura.data);
+
+    if ('ts' in data) {
+      data.tn = data.ts;
+      delete data.ts;
     }
 
     json.push(data);

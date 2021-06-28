@@ -14,7 +14,7 @@ router.post('/', auth, verify, userController.addUsuario);
 router.get('/all', auth, userController.getUsuarios);
 router.get('/:userID', auth, userController.getUsuario);
 router.delete('/:userID', auth, userController.deleteUsuario);
-router.patch('/edit/my-password/:userID', auth, userController.patchMyPassword)
+router.patch('/edit/my-password/:userID', auth, userController.patchMyPassword);
 router.patch('/edit/user-password/:userID', auth, verify, userController.patchUserPassword);
 router.patch('/edit/name/:userID', auth, userController.patchName);
 router.patch('/edit/type/:userID', auth, verify, userController.patchType);

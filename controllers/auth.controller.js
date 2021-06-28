@@ -32,7 +32,7 @@ async function login(req, res) {
     res.status(400).send('You must send username and password');
     return;
   }
-  
+
   try {
     await executionContext(async (context) => {
       const { connection } = context;

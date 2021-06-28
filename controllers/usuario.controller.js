@@ -94,9 +94,9 @@ async function patchUserPassword(req, res) {
     return;
   }
 
-  if(data.old_password === undefined || data.new_password === undefined) {
+  if (data.old_password === undefined || data.new_password === undefined) {
     res.status(400)
-    .send('Invalid body request. password propierty is missing');
+      .send('Invalid body request. password propierty is missing');
     return;
   }
 
@@ -211,11 +211,11 @@ function getUsuarios(req, res) {
  * @param {express.Request} req Request parameter.
  * @param {express.Response} res Response parameter.
  */
- async function patchMyPassword(req, res) {
+async function patchMyPassword(req, res) {
   const userId = req.params.userID;
   const {
-    old_password,
-    new_password,
+    oldPassword,
+    newPassword,
   } = req.body;
 
   if (req.userName !== userId) {
@@ -223,9 +223,9 @@ function getUsuarios(req, res) {
     return;
   }
 
-  if(old_password === undefined || new_password === undefined) {
+  if (oldPassword === undefined || newPassword === undefined) {
     res.status(400)
-    .send('Invalid body request');
+      .send('Invalid body request');
     return;
   }
 
@@ -245,14 +245,14 @@ function getUsuarios(req, res) {
     return;
   }
 
-  const curr_password = usuarioResult[0].password;
-  const hashCompare = await encrypt.comparePassword(old_password, curr_password);
+  const currPassword = usuarioResult[0].password;
+  const hashCompare = await encrypt.comparePassword(oldPassword, currPassword);
   if (!hashCompare) {
     res.status(401).send('The username or password you entered is incorrect');
     return;
   }
 
-  const passEncrypt = await encrypt.hashPassword(new_password);
+  const passEncrypt = await encrypt.hashPassword(newPassword);
   executionContext((context) => {
     const { connection } = context;
 
@@ -269,7 +269,6 @@ function getUsuarios(req, res) {
         }
       });
   });
-
 }
 
 /**
@@ -278,7 +277,7 @@ function getUsuarios(req, res) {
  * @param {express.Request} req Request parameter.
  * @param {express.Response} res Response parameter.
  */
- async function patchName(req, res) {
+async function patchName(req, res) {
   const userId = req.params.userID;
   const data = req.body;
 
@@ -287,7 +286,6 @@ function getUsuarios(req, res) {
     return;
   }
 
-  console.log(data.name)
   executionContext((context) => {
     const { connection } = context;
 
@@ -305,7 +303,6 @@ function getUsuarios(req, res) {
       });
   });
 }
-
 
 module.exports = {
   addUsuario,
