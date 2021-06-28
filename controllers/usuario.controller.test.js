@@ -41,6 +41,7 @@ describe(`Test ${ROOT_PATH}`, () => {
         username: 'unitTestUser',
         password: '12345',
         type: 'user',
+        name: 'test user',
       })
       .then((response) => {
         expect(response.statusCode).toBe(201);
@@ -58,9 +59,9 @@ describe(`Test ${ROOT_PATH}`, () => {
       });
   });
 
-  test('Patch node type', (done) => {
+  test('Patch user type', (done) => {
     request(app)
-      .patch(`${ROOT_PATH}/type/unitTestUser`)
+      .patch(`${ROOT_PATH}/edit/type/unitTestUser`)
       .set('Authorization', token)
       .send({
         type: 'admin',
@@ -73,10 +74,10 @@ describe(`Test ${ROOT_PATH}`, () => {
 
   test('Patch user password', (done) => {
     request(app)
-      .patch(`${ROOT_PATH}/password/unitTestUser`)
+      .patch(`${ROOT_PATH}/edit/user-password/unitTestUser`)
       .set('Authorization', token)
       .send({
-        password: 'newUnitTestPasswordUltraSecure',
+        newPassword: 'newUnitTestPasswordUltraSecure',
       })
       .then((response) => {
         expect(response.statusCode).toBe(200);
@@ -96,7 +97,7 @@ describe(`Test ${ROOT_PATH}`, () => {
 
   test('Get usuarios', (done) => {
     request(app)
-      .get(`${ROOT_PATH}/todos/usuarios`)
+      .get(`${ROOT_PATH}/all`)
       .set('Authorization', token)
       .then((response) => {
         expect(response.statusCode).toBe(200);

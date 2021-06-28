@@ -94,13 +94,13 @@ async function patchUserPassword(req, res) {
     return;
   }
 
-  if (data.old_password === undefined || data.new_password === undefined) {
+  if (data.newPassword === undefined) {
     res.status(400)
-      .send('Invalid body request. password propierty is missing');
+      .send('Invalid body request. \'newPassword\' propierty is missing');
     return;
   }
 
-  const passEncrypt = await encrypt.hashPassword(data.password);
+  const passEncrypt = await encrypt.hashPassword(data.newPassword);
 
   executionContext((context) => {
     const { connection } = context;
@@ -206,7 +206,7 @@ function getUsuarios(req, res) {
 }
 
 /**
- * PATCH /api/usuario/edit/type/:id
+ * PATCH /api/usuario/edit/my-password/:id
  * @exports patchMyPassword
  * @param {express.Request} req Request parameter.
  * @param {express.Response} res Response parameter.

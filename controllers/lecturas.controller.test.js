@@ -16,6 +16,10 @@ errorLog.mockImplementation((data) => console.log(data));
 const ROOT_PATH = '/wsnv21/api/lecturas';
 
 describe(`Test ${ROOT_PATH}/logs`, () => {
+  beforeEach(() => {
+    jest.setTimeout(15000);
+  });
+
   it('It should 200 in a GET method', (done) => {
     request(app).get(`${ROOT_PATH}/logs`).expect(200).end(done);
   });
