@@ -76,31 +76,37 @@ async function getUsuario(req, res) {
 }
 
 /**
- * PATCH /api/usuario/password/:id
+ * PATCH /api/usuario/edit/user-password/:id
  * @exports patchPassword
  * @param {express.Request} req Request parameter.
  * @param {express.Response} res Response parameter.
  */
-async function patchPassword(req, res) {
+async function patchUserPassword(req, res) {
   const userId = req.params.userID;
   const data = req.body;
 
-  if (req.userName !== userId && req.userType !== validarUser.TYPES.ADMIN) {
+  if (req.userType !== validarUser.TYPES.ADMIN) {
     res
       .status(400)
       .send(
-        'You can only edit your own password unless your role type is Admin',
+        'You can only edit others password unless your role type is Admin',
       );
     return;
   }
 
-  const passEncrypt = await encrypt.hashPassword(data.password);
+  if (data.newPassword === undefined) {
+    res.status(400)
+      .send('Invalid body request. \'newPassword\' propierty is missing');
+    return;
+  }
+
+  const passEncrypt = await encrypt.hashPassword(data.newPassword);
 
   executionContext((context) => {
     const { connection } = context;
 
     userModel
-      .patchPassword(connection, userId, passEncrypt)
+      .patchUserPassword(connection, userId, passEncrypt)
       .then(() => {
         res.sendStatus(200);
       })
@@ -115,7 +121,7 @@ async function patchPassword(req, res) {
 }
 
 /**
- * PATCH /api/usuario/tipo/:id
+ * PATCH /api/usuario/edit/type/:id
  * @exports patchType
  * @param {express.Request} req Request parameter.
  * @param {express.Response} res Response parameter.
@@ -177,7 +183,7 @@ function deleteUsuario(req, res) {
 }
 
 /**
- * GET /api/todos/usuarios
+ * GET /api/usuarios/all
  * @exports getUsuarios
  * @param {express.Request} req Request parameter.
  * @param {express.Response} res Response parameter.
@@ -199,11 +205,112 @@ function getUsuarios(req, res) {
   });
 }
 
+/**
+ * PATCH /api/usuario/edit/my-password/:id
+ * @exports patchMyPassword
+ * @param {express.Request} req Request parameter.
+ * @param {express.Response} res Response parameter.
+ */
+async function patchMyPassword(req, res) {
+  const userId = req.params.userID;
+  const {
+    oldPassword,
+    newPassword,
+  } = req.body;
+
+  if (req.userName !== userId) {
+    res.status(401).send('You can only edit your own password');
+    return;
+  }
+
+  if (oldPassword === undefined || newPassword === undefined) {
+    res.status(400)
+      .send('Invalid body request');
+    return;
+  }
+
+  let usuarioResult = {};
+  try {
+    await executionContext(async (context) => {
+      const { connection } = context;
+      usuarioResult = await userModel.getUsuarioAuth(connection, userId);
+    });
+  } catch (e) {
+    res.status(500).send(e.message);
+    return;
+  }
+
+  if (usuarioResult.length === 0) {
+    res.status(401).send('The username or password you entered is incorrect');
+    return;
+  }
+
+  const currPassword = usuarioResult[0].password;
+  const hashCompare = await encrypt.comparePassword(oldPassword, currPassword);
+  if (!hashCompare) {
+    res.status(401).send('The username or password you entered is incorrect');
+    return;
+  }
+
+  const passEncrypt = await encrypt.hashPassword(newPassword);
+  executionContext((context) => {
+    const { connection } = context;
+
+    userModel
+      .patchUserPassword(connection, userId, passEncrypt)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        if (Object.prototype.hasOwnProperty.call(err, 'sqlMessage')) {
+          res.status(400).send(err.sqlMessage);
+        } else {
+          res.status(500).send(err);
+        }
+      });
+  });
+}
+
+/**
+ * PATCH /api/usuario/edit/name/:id
+ * @exports patchName
+ * @param {express.Request} req Request parameter.
+ * @param {express.Response} res Response parameter.
+ */
+async function patchName(req, res) {
+  const userId = req.params.userID;
+  const data = req.body;
+
+  if (req.userName !== userId) {
+    res.status(401).send('You can only edit your own name');
+    return;
+  }
+
+  executionContext((context) => {
+    const { connection } = context;
+
+    userModel
+      .patchName(connection, userId, data.name)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        if (Object.prototype.hasOwnProperty.call(err, 'sqlMessage')) {
+          res.status(400).send(err.sqlMessage);
+        } else {
+          res.status(500).send(err);
+        }
+      });
+  });
+}
+
 module.exports = {
   addUsuario,
   getUsuario,
-  patchPassword,
+  patchUserPassword,
   patchType,
   deleteUsuario,
   getUsuarios,
+  patchMyPassword,
+  patchName,
 };

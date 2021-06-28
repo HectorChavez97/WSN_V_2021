@@ -1,7 +1,7 @@
 async function addUsuario(connection, user) {
   return new Promise((resolve, reject) => {
-    connection.query('INSERT INTO User VALUES (?, ?, ?)',
-      [user.username, user.password, user.type.toLowerCase()], (err, results) => {
+    connection.query('INSERT INTO User VALUES (?, ?, ?, ?)',
+      [user.username, user.name, user.password, user.type.toLowerCase()], (err, results) => {
         if (err) return reject(err);
 
         return resolve(results);
@@ -11,7 +11,7 @@ async function addUsuario(connection, user) {
 
 async function getUsuario(connection, userId) {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT username, type, password FROM User WHERE username = ?',
+    connection.query('SELECT username, name, type FROM User WHERE username = ?',
       userId, (err, results) => {
         if (err) return reject(err);
 
@@ -20,7 +20,7 @@ async function getUsuario(connection, userId) {
   });
 }
 
-async function patchPassword(connection, userId, password) {
+async function patchUserPassword(connection, userId, password) {
   return new Promise((resolve, reject) => {
     connection.query(`UPDATE User SET password = ? 
     WHERE username = ?`,
@@ -44,6 +44,18 @@ async function patchType(connection, userId, type) {
   });
 }
 
+async function patchName(connection, userId, name) {
+  return new Promise((resolve, reject) => {
+    connection.query(`UPDATE User SET name = ? 
+    WHERE username = ?`,
+    [name, userId], (err, results) => {
+      if (err) return reject(err);
+
+      return resolve(results);
+    });
+  });
+}
+
 async function deleteUsuario(connection, userId) {
   return new Promise((resolve, reject) => {
     connection.query('DELETE FROM User WHERE username = ?',
@@ -57,7 +69,7 @@ async function deleteUsuario(connection, userId) {
 
 async function getUsuarios(connection) {
   return new Promise((resolve, reject) => {
-    connection.query('SELECT username, type FROM User', (err, results) => {
+    connection.query('SELECT username, name, type FROM User', (err, results) => {
       if (err) return reject(err);
 
       return resolve(results);
@@ -90,9 +102,10 @@ async function getUsuarioAuth(connection, username) {
 module.exports = {
   addUsuario,
   getUsuario,
-  patchPassword,
+  patchUserPassword,
   patchType,
   deleteUsuario,
   getUsuarios,
   getUsuarioAuth,
+  patchName,
 };

@@ -16,7 +16,7 @@ function verify(req, res, next) {
     return;
   }
 
-  if (type !== validarUser.TYPES.ADMIN) {
+  if (type.toLowerCase() !== validarUser.TYPES.ADMIN) {
     res.status(401).send('Invalid user type');
     return;
   }
